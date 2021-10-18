@@ -13,8 +13,11 @@ Details of TTSP can be found in our ICCD 2021 paper, and please consider citing 
 Follow the steps below for applying the patch file, in TTSP/HotSniper_Plugin, that contains all changes to the original HotSniper:
   
   $ git clone git@github.com:anujpathania/HotSniper.git
+  
   $ cd HotSniper
+  
   $ git apply plugin.patch
+  
   $ <build HotSniper according to default procedure mentioned in git@github.com:anujpathania/HotSniper.git>
 
 ## 2- Standalone
