@@ -1,4 +1,4 @@
-This repository contains the source code of the novel power budgeting technique, called "*TTSP: Transient-Temperature Based Safe Power Budgeting", for multi-/many-core processors.
+This repository contains the source code of the novel power budgeting technique, called "*TTSP: Transient-Temperature Based Safe Power Budgeting*", for multi-/many-core processors.
 -   Creator: Sobhan Niknam
 -   License: XXXX
 
@@ -6,7 +6,7 @@ This repository contains the source code of the novel power budgeting technique,
 
 Details of TTSP can be found in our ICCD 2021 paper, and please consider citing this paper in your work if you find this tool useful in your research.
 
-> Sobhan Niknam, Anuj Pathania, and Andy A. Pimentel. **"T-TSP:Transient-Temperature Based Safe Power Budgeting in Multi-/Many-Core Processors."** *In The 39th IEEE International Conference on Computer Design (ICCD), October 24 - 27, 2021.
+> Sobhan Niknam, Anuj Pathania, and Andy A. Pimentel. **"T-TSP:Transient-Temperature Based Safe Power Budgeting in Multi-/Many-Core Processors."** *In The 39th IEEE International Conference on Computer Design (ICCD)*, October 24 - 27, 2021.
 
 # Versions
 ## 1- HotSniper Plugin
