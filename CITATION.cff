@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Niknam"
+  given-names: "S."
+- family-names: "Pathania"
+  given-names: "A."
+- family-names: "Pimentel"
+  given-names: "A."
+title: "T-TSP: Transient-Temperature Based Safe Power
+Budgeting in Multi-/Many-Core Processors"
+doi:
+date-released: 
+url: 
