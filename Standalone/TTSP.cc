@@ -85,6 +85,7 @@ TTSP::TTSP(unsigned int numberCores, const std::string thermalModelFilename, dou
             Inv_matrix_exponentials_overhead[k][j] = (k==j) ? matrix_exponentials_overhead[k][j]-1.0: matrix_exponentials_overhead[k][j];
         }
     }
+    budgets.resize(numberCores, inactivePower);
 
     f.close();
 }
@@ -146,9 +147,9 @@ void inplaceGauss(std::vector<std::vector<float> > &A, std::vector<float> &b) {
 }
 
 /** powerBudgetTTSP
- * Compute per-core power budgets considering the location and transient temperature of the cores that (if matched by the power consumption) heats every core exactly to the critical temperature.
+ * Return a per-core power budget wrt. the location and transient temperature of the cores that (if matched by the power consumption) heats every core exactly to the critical temperature.
  */
-std::vector<double> TTSP::powerBudgetTTSP(std::string temperature_file, std::string mapping_file) const {
+std::vector<double> TTSP::powerBudgetTTSP(std::string mapping_file, std::string temperature_file) const {
     
     std::vector<int> activeIndices;
     std::vector<double> inactivePowers(numberCores, 0);
@@ -194,7 +195,7 @@ std::vector<double> TTSP::powerBudgetTTSP(std::string temperature_file, std::str
     for (unsigned int i = 0; i < activeIndices.size(); i++) {
         A.at(i) = 0;
         for (unsigned int j = 0; j < activeIndices.size(); j++) {
-            A.at(i) += matrix_exponentials[activeIndices.at(i)][activeIndices.at(j)]*pred_Tinit[activeIndices.at(j)];
+            A.at(i) += matrix_exponentials[activeIndices.at(i)][activeIndices.at(j)]*pred_Tinit[j];
         }
         A.at(i) -= maxTemperature;
     }
@@ -209,13 +210,13 @@ std::vector<double> TTSP::powerBudgetTTSP(std::string temperature_file, std::str
         B.push_back(row);
     }
 
-    // Now solve B * Tsteady = A
+    // now solve B * Tsteady = A
     inplaceGauss(B, T_steady);
     for(int k = 0; k < activeIndices.size(); k++)
     {
-        cout<<"[TTSP]: The initial, predicted (after time overhead), and targeted steady-state termperatures of core "<< activeIndices.at(k) <<" for the upcoming epoch: "<< Tinit[activeIndices.at(k)] <<", "<<pred_Tinit.at(k)<<","<<T_steady.at(k) <<endl; 
+        cout<<"The initial, the predicted (after timing overhead), and the targeted steady-state termperatures of core "<< activeIndices.at(k) <<" for the next epoch: "<< Tinit[activeIndices.at(k)] <<", "<<pred_Tinit.at(k)<<", "<<T_steady.at(k)<<" (\u02DAC)"<<endl; 
     }
-
+    cout<<endl;
     //4. Computing the corresponding power budget to the computed steady-state termperatures
     std::vector<float> tInactive = getSteadyState(inactivePowers);
     std::vector<float> ambient(activeIndices.size());
@@ -234,12 +235,15 @@ std::vector<double> TTSP::powerBudgetTTSP(std::string temperature_file, std::str
         }
         BInvTrunc.push_back(row);
     }
-    // Now solve BInvTrunc * powersTrunc = headroomTrunc
+    // now solve BInvTrunc * powersTrunc = headroomTrunc
     inplaceGauss(BInvTrunc, powersTrunc);
 
     for (unsigned int i = 0; i < activeIndices.size(); i++) {
          powers.at(activeIndices.at(i)) = powersTrunc.at(i);
+		 cout<<"The computed power budget of core "<<activeIndices.at(i)<<" is "<<powers.at(activeIndices.at(i))<<" W"<<endl;
     }
+    if(activeIndices.size()<numberCores)
+        cout<<"The power budget of all other (idle) cores are "<<inactivePower<<" W"<<endl;
 
     return powers;
 }

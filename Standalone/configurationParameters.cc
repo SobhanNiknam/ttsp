@@ -16,7 +16,6 @@ ConfigurationParameters::ConfigurationParameters()
 	Pb_overhead = 0;
 	Pb_epoch_length = 100000;
 	P_inactive_Core = 0.3;
-	outputFileName = "t-tsp";
 	CoreMappingFileName = "";
 	TransientTemperatureFileName = "";
 	ThermalModelMatrixFileName = "";
@@ -46,17 +45,17 @@ void ConfigurationParameters::parseCommandLine(int argc, char *argv[])
 					addNewParameter(newParameter, true);
 				}
 				else{
-					cout << "Error: Invalid command line. Parameter \"" << newParameter.name << "\" has no value. Please check usage." << endl;
+					cout << "Error: Invalid command line. Parameter \"" << newParameter.name << "\" has no value. Please check usage using -help." << endl;
 					exit(1);
 				}
 			}
 			else{
-				cout << "Error: Invalid command line. Parameter name \"" << newParameter.name << "\" is invalid. Please check usage." << endl;
+				cout << "Error: Invalid command line. Parameter name \"" << newParameter.name << "\" is invalid. Please check usage using -help." << endl;
 				exit(1);
 			}
 		}
 		else{
-			cout << "Error: Invalid command line. Please check usage." << endl;
+			cout << "Error: Invalid command line. Please check usage using -help." << endl;
 			exit(1);
 		}
 	}
@@ -86,7 +85,7 @@ bool ConfigurationParameters::verify(void)
 		return false;
 	}
 	if(Pb_overhead < 0){
-		cout << "Error: The run-time overhead of power budgeting cannot be a negative value." << endl;
+		cout << "Error: The run-time overhead of the power budgeting algorithm cannot be a negative value." << endl;
 		return false;
 	}
 	if(ThermalModelMatrixFileName.size() <= 0){
@@ -107,20 +106,18 @@ bool ConfigurationParameters::verify(void)
 
 bool ConfigurationParameters::parameterNameValid(const string &newParameterName)
 {
-	if(	(newParameterName == "c") ||
-		(newParameterName == "t") ||
-		(newParameterName == "m") ||
+	if( (newParameterName == "c") || // for CoreMappingFileName
+		(newParameterName == "t") || // for TransientTemperatureFileName
+		(newParameterName == "m") || // for ThermalModelMatrixFileName
+		(newParameterName == "cores") ||
 		(newParameterName == "t_amb") ||
 		(newParameterName == "t_dtm") ||
-		(newParameterName == "cores") ||
 		(newParameterName == "p_inactive_core") ||
-		(newParameterName == "mapping") ||
 		(newParameterName == "transient") ||
 		(newParameterName == "thermal_model") ||
 		(newParameterName == "l_epoch") ||
 		(newParameterName == "t_ov") ||
 		(newParameterName == "")){
-
 		return true;
 	}
 	else{
@@ -143,10 +140,7 @@ void ConfigurationParameters::addNewParameter(const Parameter &newParameter, con
 		if((repeatedIndex < 0) || newHasPriority){
 
 			// Start with the configuration parameters that are names of files
-			if(newParameter.name == "o"){
-				outputFileName = newParameter.value;
-			}
-			else if(newParameter.name == "c"){
+			if(newParameter.name == "c"){
 				CoreMappingFileName = newParameter.value;
 			}
 			else if(newParameter.name == "t"){

@@ -57,7 +57,7 @@ public:
 	double Pb_epoch_length;									/*	The length of epoch at which the power budgets are computed.				*/
 	double Pb_overhead;										/*	The overhead of power budgeting algorithm.									*/
 	int numberOfCores;										/*	Number of cores in the floorplan.											*/
-	string outputFileName;									/*	Name of the output file in which to store the T-TSP values.					*/
+	string OutputFileName;									/*	Name of the output file in which to store the T-TSP values.					*/
 	string CoreMappingFileName;								/*	Name of the input file of a core mapping for which to compute T-TSP.		*/
 	string TransientTemperatureFileName;					/*	Name of the input file with the the transient temperature of cores.			*/
 	string ThermalModelMatrixFileName;						/*	Name of the input file with the values of the hard-ware dependant matrices.	*/
