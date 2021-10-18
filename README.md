@@ -9,7 +9,7 @@ Details of TTSP can be found in our ICCD 2021 paper, and please consider citing 
 > Sobhan Niknam, Anuj Pathania, and Andy A. Pimentel. **"T-TSP:Transient-Temperature Based Safe Power Budgeting in Multi-/Many-Core Processors."** *In The 39th IEEE International Conference on Computer Design (ICCD)*, October 24 - 27, 2021.
 
 # Versions
-## 1- HotSniper Plugin
+## 1- [HotSniper](https://github.com/anujpathania/HotSniper) Plugin
 Follow the steps below for applying the patch file, in TTSP/HotSniper_Plugin, that contains all changes to the original HotSniper:
   
   $ git clone git@github.com:anujpathania/HotSniper.git
