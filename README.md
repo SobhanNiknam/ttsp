@@ -1,5 +1,5 @@
 # TTSP
-This repository contains the source code of the novel power budgeting technique, called "*TTSP: Transient-Temperature Based Safe Power Budgeting*". TTSP computes safe power constraint values as a function of the spatial alignment of active cores and their transient temperature in a multi-/many-core processor. The use of T-TSP leads to better exploitation of the processor’s thermal heatroom and therefore improved performance in a thermally constrained environment.
+This repository contains the source code of the novel power budgeting technique, called "*TTSP: Transient-Temperature Based Safe Power Budgeting*". TTSP computes safe power constraint values as a function of the spatial alignment of active cores and their transient temperature in a multi-/many-core processor. The use of T-TSP leads to better exploitation of the processor’s thermal headroom and therefore improved performance in a thermally constrained environment.
 
 # Publication
 
@@ -20,7 +20,7 @@ Follow the steps below for applying the patch file, in TTSP/HotSniper_Plugin, th
   $ <build HotSniper according to default procedure mentioned in git@github.com:anujpathania/HotSniper.git>
 
 ## 2- Standalone
-
+TODO
 
 # Code Acknowledgements
 
