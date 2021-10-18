@@ -4,7 +4,7 @@ This repository contains the source code of the novel power budgeting technique,
 
 # Publication
 
-Details of TTSP can be found in our ICCD 2021 paper, and please consider citing this paper in your work if you find this tool useful in your research.
+Details of TTSP can be found in the following ICCD 2021 paper. Please consider citing this paper in your work if you find this tool useful in your research.
 
 > Sobhan Niknam, Anuj Pathania, and Andy A. Pimentel. **"T-TSP:Transient-Temperature Based Safe Power Budgeting in Multi-/Many-Core Processors."** *In The 39th IEEE International Conference on Computer Design (ICCD)*, October 24 - 27, 2021.
 
