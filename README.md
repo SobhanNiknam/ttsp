@@ -19,7 +19,7 @@ Follow the steps below for applying the patch file, in ttsp/HotSniper_Plugin, th
 ## 2- Standalone
 To use the standalone implementation of TTSP, several input files, i.e., a temperature trace file (containing transient temperature of thermal nodes), an eigeninput file (containing the eigenvectors, eigenvalues, and all required matrices corresponding to the RC thermal model), and an input file indicating the active cores in a processor, are required. Please note that the matrices of the RC thermal model can be derived using [Matex](http://ces.itec.kit.edu/846.php) and [Hotspot](https://github.com/IFTE-EDA/HotSpot) for a given processor's floorplan. An example for each of the input files is available in ttsp/standalone. Use the following commands to build and run the software using the given exemplary input files. 
   
-    cd ttsp/standalone
+    cd standalone
     make
     ./TTSP -c givenMapping.map -t Temperature.init -m eigendata.bin
 
