@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 preferred-citation:
-  type: conference
+  type: conference-paper
   authors:
   - family-names: "Niknam"
     given-names: "S."
@@ -10,4 +10,5 @@ preferred-citation:
   - family-names: "Pimentel"
     given-names: "A."
   title: "T-TSP: Transient-Temperature Based Safe Power Budgeting in Multi-/Many-Core Processors"
+  conference: "The 39th IEEE International Conference on Computer Design (ICCD)"
   doi: ""
