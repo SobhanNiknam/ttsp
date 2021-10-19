@@ -20,10 +20,8 @@ int main(int argc, char *argv[])
 		configurationParameters.parseCommandLine(argc, argv);
 
 		// Verify the configuration
-		if(configurationParameters.verify() == false){
-			cout << "Error: The configuration has some invalid parameters." << endl;
+		if(configurationParameters.verify() == false)
 			exit(-1);
-		}
 
     	TTSP ttsp(configurationParameters.numberOfCores, configurationParameters.ThermalModelMatrixFileName, \
 			  configurationParameters.Tamb, configurationParameters.Tdtm, configurationParameters.P_inactive_Core, \

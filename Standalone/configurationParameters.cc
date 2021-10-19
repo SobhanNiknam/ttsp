@@ -1,24 +1,17 @@
-/**	\file	configurationParameters.cpp
- *	\brief	Source file for general configuration parameters.
- */
-
 #include "configurationParameters.h"
-
-
-
 
 ConfigurationParameters::ConfigurationParameters()
 {
 	// Set defaults values for all configuration parameters
-	numberOfCores = 64;
-	Tamb = 45;
-	Tdtm = 80;
-	Pb_overhead = 0;
-	Pb_epoch_length = 100000;
-	P_inactive_Core = 0.3;
-	CoreMappingFileName = "";
-	TransientTemperatureFileName = "";
-	ThermalModelMatrixFileName = "";
+	numberOfCores = 64; 				// Number of cores in the processor
+	Tamb = 45; 							// Ambient temperature (in Celsius)
+	Tdtm = 80;							// Thermal threshold (in Celsius)
+	Pb_overhead = 0;					// Timing overhead of the power budgeting algorithm
+	Pb_epoch_length = 100000; 			// Epoch length of power budgeting
+	P_inactive_Core = 0.3;				// Power consumption of inactive cores
+	CoreMappingFileName = ""; 		   	// File containing the list of active cores
+	TransientTemperatureFileName = ""; 	// File containing the transient temperature of thermal nodes 
+	ThermalModelMatrixFileName = "";   	// File containing matrices of the thermal model
 }
 
 void ConfigurationParameters::parseCommandLine(int argc, char *argv[])
@@ -33,6 +26,20 @@ void ConfigurationParameters::parseCommandLine(int argc, char *argv[])
 			newParameter.name = &(argv[i][1]);
 			i++;
 
+			if(newParameter.name == "help"){
+				cout << std::endl << "USAGE: " << argv[0]
+                << " -c Core_Mapping_FileName" << endl
+				<<   "              -t Transient_Temperature_FileName" << endl
+				<<   "              -m Thermal_Model_FileName [-n Number_of_Cores]" << endl
+				<<   "              [-a Ambient_Temperature_(in Celsius)]" << endl
+				<<   "              [-d Threshold_Temperature_(in Celsius)]" << endl
+				<<   "              [-e Epoch_Length]" << endl
+				<<   "              [-i Power_of_inactive_core]" << endl
+				<<   "              [-v timing_overhead_(in microseconds)]" << endl
+                << std::endl;
+				exit(1);	
+			}
+
 			// Check if it is a valid name
 			if(parameterNameValid(newParameter.name)){
 
@@ -45,17 +52,17 @@ void ConfigurationParameters::parseCommandLine(int argc, char *argv[])
 					addNewParameter(newParameter, true);
 				}
 				else{
-					cout << "Error: Invalid command line. Parameter \"" << newParameter.name << "\" has no value. Please check usage using -help." << endl;
+					cout << std::endl << "Error: Invalid command line. Parameter \"" << newParameter.name << "\" has no value. Please check usage using -help." << endl;
 					exit(1);
 				}
 			}
 			else{
-				cout << "Error: Invalid command line. Parameter name \"" << newParameter.name << "\" is invalid. Please check usage using -help." << endl;
+				cout << std::endl << "Error: Invalid command line. Parameter name \"" << newParameter.name << "\" is invalid. Please check usage using -help." << endl;
 				exit(1);
 			}
 		}
 		else{
-			cout << "Error: Invalid command line. Please check usage using -help." << endl;
+			cout << std::endl << "Error: Invalid command line. Please check usage using -help" << endl;
 			exit(1);
 		}
 	}
@@ -65,39 +72,39 @@ void ConfigurationParameters::parseCommandLine(int argc, char *argv[])
 bool ConfigurationParameters::verify(void)
 {
 	if(numberOfCores <= 0){
-		cout << "Error: The number of cores must be a positive integer value." << endl;
+		cout << std::endl << "Error: The number of cores must be a positive integer value." << endl;
 		return false;
 	}
 	if(Tamb < 0){
-		cout << "Error: The ambient temperature cannot be a negative value." << endl;
+		cout << std::endl << "Error: The ambient temperature cannot be a negative value." << endl;
 		return false;
 	}
 	if(Tdtm < 0){
-		cout << "Error: The temperature for triggering DTM cannot be a negative value." << endl;
+		cout << std::endl << "Error: The temperature for triggering DTM cannot be a negative value." << endl;
 		return false;
 	}
 	if(P_inactive_Core < 0){
-		cout << "Error: The power of an inactive core cannot be a negative value." << endl;
+		cout << std::endl << "Error: The power of an inactive core cannot be a negative value." << endl;
 		return false;
 	}
 	if(Pb_epoch_length < 0){
-		cout << "Error: The length of a power budgeting epoch cannot be a negative value." << endl;
+		cout << std::endl << "Error: The length of a power budgeting epoch cannot be a negative value." << endl;
 		return false;
 	}
 	if(Pb_overhead < 0){
-		cout << "Error: The run-time overhead of the power budgeting algorithm cannot be a negative value." << endl;
+		cout << std::endl << "Error: The run-time overhead of the power budgeting algorithm cannot be a negative value." << endl;
 		return false;
 	}
 	if(ThermalModelMatrixFileName.size() <= 0){
-		cout << "Error: There is no file with the values for the matrices of the thermal model." << endl;
+		cout << std::endl << "Error: There is no file with the values for the matrices of the thermal model." << endl;
 		return false;
 	}
 	if(TransientTemperatureFileName.size() <= 0){
-		cout << "Error: There is no file with the values for the transient temperature of cores." << endl;
+		cout << std::endl << "Error: There is no file with the values for the transient temperature of cores." << endl;
 		return false;
 	}
 	if(CoreMappingFileName.size() <= 0){
-		cout << "Error: There is no file for the active core mapping on the platform." << endl;
+		cout << std::endl << "Error: There is no file for the active core mapping on the platform." << endl;
 		return false;
 	}
 	return true;
@@ -106,17 +113,15 @@ bool ConfigurationParameters::verify(void)
 
 bool ConfigurationParameters::parameterNameValid(const string &newParameterName)
 {
-	if( (newParameterName == "c") || // for CoreMappingFileName
-		(newParameterName == "t") || // for TransientTemperatureFileName
-		(newParameterName == "m") || // for ThermalModelMatrixFileName
-		(newParameterName == "cores") ||
-		(newParameterName == "t_amb") ||
-		(newParameterName == "t_dtm") ||
-		(newParameterName == "p_inactive_core") ||
-		(newParameterName == "transient") ||
-		(newParameterName == "thermal_model") ||
-		(newParameterName == "l_epoch") ||
-		(newParameterName == "t_ov") ||
+	if( (newParameterName == "c") ||
+		(newParameterName == "t") ||
+		(newParameterName == "m") ||
+		(newParameterName == "n") ||
+		(newParameterName == "a") ||
+		(newParameterName == "d") ||
+		(newParameterName == "i") ||
+		(newParameterName == "e") ||
+		(newParameterName == "v") ||
 		(newParameterName == "")){
 		return true;
 	}
@@ -156,22 +161,22 @@ void ConfigurationParameters::addNewParameter(const Parameter &newParameter, con
 					streamValue.exceptions(stringstream::goodbit);
 					streamValue >> dValue;
 					if((streamValue.rdstate() == stringstream::goodbit) || (streamValue.rdstate() == stringstream::eofbit)){
-						if(newParameter.name == "cores"){
+						if(newParameter.name == "n"){
 							numberOfCores = dValue;
 						}
-						else if(newParameter.name == "t_amb"){
+						else if(newParameter.name == "a"){
 							Tamb = dValue;
 						}
-						else if(newParameter.name == "t_dtm"){
+						else if(newParameter.name == "d"){
 							Tdtm = dValue;
 						}
-						else if(newParameter.name == "p_inactive_core"){
+						else if(newParameter.name == "i"){
 							P_inactive_Core = dValue;
 						}
-						else if(newParameter.name == "l_epoch"){
+						else if(newParameter.name == "e"){
 							Pb_epoch_length = dValue;
 						}
-						else if(newParameter.name == "t_ov"){
+						else if(newParameter.name == "v"){
 							Pb_overhead = dValue;
 						}
 						else{
@@ -179,10 +184,10 @@ void ConfigurationParameters::addNewParameter(const Parameter &newParameter, con
 						}
 					}
 					else
-						cout << "Error in configuration file: Value of parameter \"" << newParameter.name << "\" is invalid." << endl;
+						cout << std::endl << "Error in configuration file: Value of parameter \"" << newParameter.name << "\" is invalid." << endl;
 				}
 				catch(...){
-					cout << "Error in configuration file: Value of parameter \"" << newParameter.name << "\" is invalid." << endl;
+					cout << std::endl << "Error in configuration file: Value of parameter \"" << newParameter.name << "\" is invalid." << endl;
 				}
 			}
 

@@ -22,15 +22,15 @@ TTSP::TTSP(unsigned int numberCores, const std::string thermalModelFilename, dou
     unsigned int numberThermalNodes = readValue<unsigned int>(f);
 
     if (numberUnits != numberCores) {
-        std::cout << "Assertion error in thermal model file: numberUnits != coreRows * coreColumns" << std::endl;
+        std::cout << std::endl << "Assertion error in thermal model file: numberUnits != coreRows * coreColumns" << std::endl;
 		exit (1);
     }
     if (numberThermalNodes != 4 * numberUnits + 12) {
-        std::cout << "Assertion error in thermal model file: numberThermalNodes != 4 * numberUnits + 12" << std::endl;
+        std::cout << std::endl << "Assertion error in thermal model file: numberThermalNodes != 4 * numberUnits + 12" << std::endl;
 		exit (1);
     }
     if (numberNodesAmbient != numberThermalNodes - 3 * numberUnits) {
-        std::cout << "Assertion error in thermal model file: numberNodesAmbient != numberThermalNodes - 3 * numberUnits" << std::endl;
+        std::cout << std::endl << "Assertion error in thermal model file: numberNodesAmbient != numberThermalNodes - 3 * numberUnits" << std::endl;
 		exit (1);
     }
 
@@ -58,7 +58,7 @@ TTSP::TTSP(unsigned int numberCores, const std::string thermalModelFilename, dou
     matrix_exponentials_overhead = new double*[numberThermalNodes];
     Inv_matrix_exponentials_overhead = new double*[numberThermalNodes];
 
-    for(int i = 0; i < numberThermalNodes; i++){
+    for(int i = 0; i < numberThermalNodes; i++) {
         matrix_exponentials[i] = new double[numberThermalNodes];
         Inv_matrix_exponentials[i] = new double[numberThermalNodes];
         matrix_exponentials_overhead[i] = new double[numberThermalNodes];
@@ -69,15 +69,15 @@ TTSP::TTSP(unsigned int numberCores, const std::string thermalModelFilename, dou
     exponentials = new double[numberThermalNodes];
     exponentials_overhead = new double[numberThermalNodes];
 
-    for(int i = 0; i < numberThermalNodes; i++){
+    for(int i = 0; i < numberThermalNodes; i++) {
         exponentials[i] = pow((double)M_E, eigenValues[i] * pb_epoch_length * pow(10,-9));
         exponentials_overhead[i] = pow((double)M_E, eigenValues[i] * pb_time_overhead * 1e-9);
     }
-    for(int k = 0; k < numberThermalNodes; k++){
-        for(int j = 0; j < numberThermalNodes; j++){
+    for(int k = 0; k < numberThermalNodes; k++) {
+        for(int j = 0; j < numberThermalNodes; j++) {
             matrix_exponentials[k][j] = 0;
             Inv_matrix_exponentials[k][j] = 0;
-            for(int i = 0; i < numberThermalNodes; i++){
+            for(int i = 0; i < numberThermalNodes; i++) {
                 matrix_exponentials[k][j] += eigenVectors[k][i]*eigenVectorsInv[i][j]*exponentials[i];
                 matrix_exponentials_overhead[k][j] += eigenVectors[k][i]*eigenVectorsInv[i][j]*exponentials_overhead[i];
             }
@@ -95,7 +95,7 @@ T TTSP::readValue(std::ifstream &file) const {
     T value;
     file.read((char*)&value, sizeof(T));
     if(file.rdstate() != std::stringstream::goodbit){
-        std::cout << "Assertion error in thermal model file: file ended too early." << std::endl;
+        std::cout << std::endl << "Assertion error in thermal model file: file ended too early." << std::endl;
         file.close();
         exit(1);
     }
@@ -106,7 +106,7 @@ std::string TTSP::readLine(std::ifstream &file) const {
     std::string value;
     std::getline(file, value);
     if(file.rdstate() != std::stringstream::goodbit){
-        std::cout << "Assertion error in thermal model file: file ended too early." << std::endl;
+        std::cout << std::endl << "Assertion error in thermal model file: file ended too early." << std::endl;
         file.close();
         exit(1);
     }
@@ -173,8 +173,7 @@ std::vector<double> TTSP::powerBudgetTTSP(std::string mapping_file, std::string 
     double temp;
  
     int component = 0;
-    while(temperatureLogFile >> header >> temp)
-    {
+    while(temperatureLogFile >> header >> temp) {
         Tinit[component] = temp - 273.15;
         component++;
     }
@@ -183,7 +182,7 @@ std::vector<double> TTSP::powerBudgetTTSP(std::string mapping_file, std::string 
     //2. Predicting the temperatures development during power budget computing (considering time overhead of the algorithm, t_ov = pb_time_overhead := 0 by default)
     std::vector<float> T_steady = getSteadyState(budgets);
     std::vector<float> pred_Tinit(activeIndices.size());
-    for(unsigned int i = 0; i < activeIndices.size(); i++){
+    for(unsigned int i = 0; i < activeIndices.size(); i++) {
         pred_Tinit.at(i) = T_steady.at(activeIndices.at(i));
         for (unsigned int j = 0; j < activeIndices.size(); j++) {
             pred_Tinit.at(i) += matrix_exponentials_overhead[activeIndices.at(i)][activeIndices.at(j)]*(Tinit[activeIndices.at(j)]-T_steady.at(activeIndices.at(j)));
@@ -212,11 +211,10 @@ std::vector<double> TTSP::powerBudgetTTSP(std::string mapping_file, std::string 
 
     // now solve B * Tsteady = A
     inplaceGauss(B, T_steady);
-    for(int k = 0; k < activeIndices.size(); k++)
-    {
-        cout<<"The initial, the predicted (after timing overhead), and the targeted steady-state termperatures of core "<< activeIndices.at(k) <<" for the next epoch: "<< Tinit[activeIndices.at(k)] <<", "<<pred_Tinit.at(k)<<", "<<T_steady.at(k)<<" (\u02DAC)"<<endl; 
+    cout<< endl;
+    for(int k = 0; k < activeIndices.size(); k++) {
+        cout<< "The initial, the predicted (after timing overhead), and the targeted steady-state termperatures of core " << activeIndices.at(k) << " for the next epoch: " << Tinit[activeIndices.at(k)] << ", " <<pred_Tinit.at(k) << ", " << T_steady.at(k) << " (\u02DAC)" << endl; 
     }
-    cout<<endl;
     //4. Computing the corresponding power budget to the computed steady-state termperatures
     std::vector<float> tInactive = getSteadyState(inactivePowers);
     std::vector<float> ambient(activeIndices.size());
@@ -240,11 +238,11 @@ std::vector<double> TTSP::powerBudgetTTSP(std::string mapping_file, std::string 
 
     for (unsigned int i = 0; i < activeIndices.size(); i++) {
          powers.at(activeIndices.at(i)) = powersTrunc.at(i);
-		 cout<<"The computed power budget of core "<<activeIndices.at(i)<<" is "<<powers.at(activeIndices.at(i))<<" W"<<endl;
+		 cout<< "The computed power budget of core " << activeIndices.at(i) << " is " << powers.at(activeIndices.at(i)) << " W" << endl;
     }
     if(activeIndices.size()<numberCores)
-        cout<<"The power budget of all other (idle) cores are "<<inactivePower<<" W"<<endl;
-
+        cout<< "The power budget of all other (idle) cores are " << inactivePower << " W" << endl;
+    cout<< endl;
     return powers;
 }
 
