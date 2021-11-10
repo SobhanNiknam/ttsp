@@ -1,9 +1,9 @@
-# TTSP
-This repository contains the source code of the novel power budgeting technique, called "*TTSP: Transient-Temperature Based Safe Power Budgeting*". TTSP computes safe power constraint values as a function of the spatial alignment of active cores and their transient temperature in a multi-/many-core processor. The use of T-TSP leads to better exploitation of the processor’s thermal headroom and therefore improved performance in a thermally constrained environment.
+# T-TSP
+This repository contains the source code of the novel power budgeting technique, called "*T-TSP: Transient-Temperature Based Safe Power Budgeting*". T-TSP computes safe power constraint values as a function of the spatial alignment of active cores and their transient temperature in a multi-/many-core processor. The use of T-TSP leads to better exploitation of the processor’s thermal headroom and therefore improved performance in a thermally constrained environment.
 
 # Publication
 
-Details of TTSP can be found in the following ICCD 2021 paper. Please consider citing this paper in your work if you use this software or a modified version of it.
+Details of T-TSP can be found in the following ICCD 2021 paper. Please consider citing this paper in your work if you use this software or a modified version of it.
 
 > Sobhan Niknam, Anuj Pathania, and Andy A. Pimentel. **"T-TSP:Transient-Temperature Based Safe Power Budgeting in Multi-/Many-Core Processors."** *In The 39th IEEE International Conference on Computer Design (ICCD)*, October 24 - 27, 2021.
 
@@ -17,7 +17,7 @@ Follow the steps below for applying the patch file, in ttsp/HotSniper_Plugin, th
     <build HotSniper according to default procedure mentioned in git@github.com:anujpathania/HotSniper.git>
 
 ## 2- Standalone
-To use the standalone implementation of TTSP, several input files, i.e., a temperature trace file (containing transient temperature of thermal nodes), an eigeninput file (containing the eigenvectors, eigenvalues, and all required matrices corresponding to the RC thermal model), and an input file indicating the active cores in a processor, are required. Please note that the matrices of the RC thermal model can be derived using [Matex](http://ces.itec.kit.edu/846.php) and [Hotspot](https://github.com/IFTE-EDA/HotSpot) for a given processor's floorplan. An example for each of the input files is available in ttsp/standalone. Use the following commands to build and run the software using the given exemplary input files. 
+To use the standalone implementation of T-TSP, several input files, i.e., a temperature trace file (containing transient temperature of thermal nodes), an eigeninput file (containing the eigenvectors, eigenvalues, and all required matrices corresponding to the RC thermal model), and an input file indicating the active cores in a processor, are required. Please note that the matrices of the RC thermal model can be derived using [Matex](http://ces.itec.kit.edu/846.php) and [Hotspot](https://github.com/IFTE-EDA/HotSpot) for a given processor's floorplan. An example for each of the input files is available in ttsp/standalone. Use the following commands to build and run the software using the given exemplary input files. 
   
     cd standalone
     make
@@ -32,3 +32,5 @@ In addition to the input files mentioned above, the software has additional vari
   HotSniper: https://github.com/anujpathania/HotSniper
   
   MatEx: http://ces.itec.kit.edu/846.php
+  
+  HotSpot: http://lava.cs.virginia.edu/HotSpot/
